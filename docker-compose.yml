@@ -155,6 +155,10 @@ services:
     environment:
       SERVICES: s3
       EAGER_SERVICE_LOADING: "1"
+      # Persiste o estado do S3 no volume localstack_data: sem isso, qualquer
+      # recreate do container (ex.: bump de MIS_VERSION no .env) zera o bucket
+      # e o cache de conversão de vídeo.
+      PERSISTENCE: "1"
     volumes:
       - localstack_data:/var/lib/localstack
       - ./localstack/init-s3.sh:/etc/localstack/init/ready.d/init-s3.sh:ro
