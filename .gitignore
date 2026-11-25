@@ -1,5 +1,5 @@
 .env
 .DS_Store
-seed/.tmp/
+config/seed/.tmp/
 *.log
-benchmark/node_modules/
+docs/benchmark/node_modules/

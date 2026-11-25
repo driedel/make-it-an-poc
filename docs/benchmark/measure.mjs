@@ -7,10 +7,11 @@
 //   - bytes transferred: encodedDataLength (wire size, gzip included), total and by type
 //   - TTFB (responseStart), DOMContentLoaded, Load (Navigation Timing)
 //   - FCP and LCP (PerformanceObserver, buffered; LCP may be null)
-// Writes one JSON per target × profile into benchmark/results/.
+// Writes one JSON per target × profile into docs/benchmark/results/.
 
 import { createRequire } from 'node:module';
 import { execSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -51,7 +52,7 @@ const PROFILES = {
   },
 };
 
-const RESULTS_DIR = path.resolve(process.cwd(), 'benchmark/results');
+const RESULTS_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'results');
 
 function median(values) {
   const nums = values.filter((v) => typeof v === 'number' && !Number.isNaN(v)).sort((a, b) => a - b);

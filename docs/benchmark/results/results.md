@@ -1,6 +1,6 @@
 # Benchmark results — dynamic WordPress vs static site
 
-Generated: 2026-11-25T15:58:04.991Z
+Generated: 2026-11-25T19:07:34.227Z
 
 Method: 1 warmup + 5 measured runs per target × page × profile, each run in a fresh
 browser context (cold cache). Values are medians. Bytes = `encodedDataLength` (wire

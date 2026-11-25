@@ -40,7 +40,7 @@ benchmark: ## Roda o benchmark WP dinâmico vs site estático (Playwright em Doc
 		-v "$(PWD):/work" -w /work \
 		-e PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 \
 		$(PLAYWRIGHT_IMAGE) \
-		sh -c "cd benchmark && (test -d node_modules/playwright || npm install --no-audit --no-fund) && cd .. && node benchmark/measure.mjs && node benchmark/report.mjs"
+		sh -c "cd docs/benchmark && (test -d node_modules/playwright || npm install --no-audit --no-fund) && cd ../.. && node docs/benchmark/measure.mjs && node docs/benchmark/report.mjs"
 
 down: ## Para e remove os containers (mantém os volumes/dados)
 	docker compose down

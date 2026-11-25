@@ -1,6 +1,6 @@
 # RASCUNHO — WordPress dinâmico vs site estático: medimos a diferença de verdade (e achamos 3 bugs no caminho)
 
-> **Status: DRAFT** — rascunho de artigo para revisão. Os números são os da rodada de benchmark desta POC (idênticos a `benchmark/results/results.md`).
+> **Status: DRAFT** — rascunho de artigo para revisão. Os números são os da rodada de benchmark desta POC (idênticos a `docs/benchmark/results/results.md`).
 
 ---
 
@@ -86,4 +86,4 @@ O número de arquivo (−62,4%) vem do **relatório de build por job** — uma f
 
 O site estático é estruturalmente mais eficiente: **86% menos TTFB, um terço menos requests, render pela metade** — e o ganho de payload cresce com a "cruelza" das imagens de origem. Mas o aprendizado mais duradouro da POC foi outro: **um pipeline desses só é confiável depois de sobreviver a um WordPress real de ponta a ponta**. Os 3 bugs que o E2E expôs — e que agora estão corrigidos e publicados (v0.2.1/v0.2.2) — valem mais que qualquer número de benchmark.
 
-Para reproduzir: `make up && make seed && make publish-site` (espere `finished`) e `make benchmark`. O detalhe completo, página a página, está em `benchmark/results/results.md`.
+Para reproduzir: `make up && make seed && make publish-site` (espere `finished`) e `make benchmark`. O detalhe completo, página a página, está em `docs/benchmark/results/results.md`.

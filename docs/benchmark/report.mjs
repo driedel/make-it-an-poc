@@ -1,11 +1,12 @@
-// Reads benchmark/results/*.json and writes benchmark/results/results.md with
-// comparative tables (WP vs static, Δ% per metric) per profile plus an overall
+// Reads docs/benchmark/results/*.json and writes docs/benchmark/results/results.md
+// with comparative tables (WP vs static, Δ% per metric) per profile plus an overall
 // summary table (median of the page medians).
 
+import { fileURLToPath } from 'node:url';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const RESULTS_DIR = path.resolve(process.cwd(), 'benchmark/results');
+const RESULTS_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'results');
 const PAGES = ['/', '/block-gallery/', '/markup-image-alignment/', '/category/block/', '/media-category-blocks/'];
 const PROFILES = ['unthrottled', 'throttled'];
 

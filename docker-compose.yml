@@ -79,7 +79,7 @@ services:
     volumes:
       - wp_data:/var/www/html
       - ../make-it-static-wp-plugin:/var/www/html/wp-content/plugins/make-it-static
-      - ./seed:/seed:ro
+      - ./config/seed:/seed:ro
     depends_on:
       wordpress:
         condition: service_started
@@ -155,13 +155,15 @@ services:
     environment:
       SERVICES: s3
       EAGER_SERVICE_LOADING: "1"
-      # Persiste o estado do S3 no volume localstack_data: sem isso, qualquer
-      # recreate do container (ex.: bump de MIS_VERSION no .env) zera o bucket
-      # e o cache de conversão de vídeo.
-      PERSISTENCE: "1"
+      # ATENÇÃO: o bucket NÃO sobrevive a recreate/restart do container. O
+      # PERSISTENCE=1 (snapshots em /var/lib/localstack/state) é recurso Pro no
+      # LocalStack 4.x — na imagem community ele é ignorado silenciosamente
+      # (verificado: shutdown gracioso não grava nada no volume). O volume
+      # localstack_data fica só para caches internos. Para repovoar o bucket
+      # após um recreate: make publish-site (o cache de vídeo é refeito uma vez).
     volumes:
       - localstack_data:/var/lib/localstack
-      - ./localstack/init-s3.sh:/etc/localstack/init/ready.d/init-s3.sh:ro
+      - ./config/localstack/init-s3.sh:/etc/localstack/init/ready.d/init-s3.sh:ro
 
   preview:
     image: nginx:1.30-alpine
@@ -170,7 +172,7 @@ services:
       - "8301:80"
     env_file: .env
     volumes:
-      - ./nginx/default.conf.template:/etc/nginx/templates/default.conf.template:ro
+      - ./config/nginx/default.conf.template:/etc/nginx/templates/default.conf.template:ro
     depends_on:
       - localstack
 
