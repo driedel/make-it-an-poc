@@ -1,0 +1,183 @@
+name: mis-poc
+
+# Bloco eval'd pelo wp-config.php (via getenv_docker) em TODOS os containers que
+# executam PHP contra o wp_data — wordpress, wpcli e cron. Sem ele no wpcli/cron,
+# WP_HOME/WP_SITEURL não são definidos no contexto CLI.
+# $$ escapa para $ literal no compose; quem executa o PHP é o eval() do wp-config.
+# WP_HOME/WP_SITEURL dinâmicos: o worker raspa http://wordpress e o HTML sai com
+# host "wordpress"; no navegador (localhost:8300) sai localhost:8300.
+# WP_AUTO_UPDATE_CORE desligado: o WP do volume auto-atualizou (6.9.4 → 7.1.5)
+# entre publishes, mudando o HTML raspado sem mudança de conteúdo.
+# A constante MAKE_IT_STATIC_HMAC_SECRET NÃO fica aqui de propósito: ela é gravada
+# literalmente no wp-config.php pelo seed (wp config set) para que `make break-secret`
+# consiga sobrescrevê-la — um define via eval rodaria antes e a sombrearia.
+x-wordpress-config-extra: &wordpress-config-extra |
+  $$mis_host = ! empty( $$_SERVER['HTTP_HOST'] ) ? $$_SERVER['HTTP_HOST'] : 'localhost:8300';
+  define( 'WP_HOME', 'http://' . $$mis_host );
+  define( 'WP_SITEURL', 'http://' . $$mis_host );
+  define( 'WP_AUTO_UPDATE_CORE', false );
+
+services:
+  db:
+    image: mariadb:11
+    restart: unless-stopped
+    ports:
+      - "8304:3306"
+    environment:
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      # $$ escapa para $ literal no compose; quem expande é o shell do container.
+      test: ["CMD-SHELL", "mariadb-admin ping -h localhost -p$$MARIADB_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  wordpress:
+    image: wordpress:6-apache
+    restart: unless-stopped
+    ports:
+      - "8300:80"
+    networks:
+      - default
+      - make-it-static-network
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: ${MARIADB_DATABASE}
+      WORDPRESS_DB_USER: ${MARIADB_USER}
+      WORDPRESS_DB_PASSWORD: ${MARIADB_PASSWORD}
+      # Secret chega só via environment (interpolação do compose), nunca via env_file,
+      # para não expor o .env inteiro aos containers do WordPress.
+      HMAC_SECRET: ${HMAC_SECRET}
+      WORDPRESS_CONFIG_EXTRA: *wordpress-config-extra
+    volumes:
+      - wp_data:/var/www/html
+      - ../make-it-static-wp-plugin:/var/www/html/wp-content/plugins/make-it-static
+    depends_on:
+      db:
+        condition: service_healthy
+
+  wpcli:
+    image: wordpress:cli
+    entrypoint: ["sleep", "infinity"]
+    # O volume wp_data é criado pelo wordpress:6-apache (Debian, www-data=33);
+    # na imagem wordpress:cli (Alpine) www-data é 82 e não escreveria no volume.
+    user: "33:33"
+    environment:
+      # O wp-config.php (gerado pelo serviço wordpress) lê DB_* via getenv_docker();
+      # sem estas vars aqui o WP-CLI cai nos defaults ('mysql', 'example username'...).
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: ${MARIADB_DATABASE}
+      WORDPRESS_DB_USER: ${MARIADB_USER}
+      WORDPRESS_DB_PASSWORD: ${MARIADB_PASSWORD}
+      HMAC_SECRET: ${HMAC_SECRET}
+      WORDPRESS_CONFIG_EXTRA: *wordpress-config-extra
+    volumes:
+      - wp_data:/var/www/html
+      - ../make-it-static-wp-plugin:/var/www/html/wp-content/plugins/make-it-static
+      - ./seed:/seed:ro
+    depends_on:
+      wordpress:
+        condition: service_started
+
+  cron:
+    image: wordpress:cli
+    restart: unless-stopped
+    entrypoint: ["/bin/sh", "-c"]
+    # Mesmo motivo do wpcli: casar o uid com o dono do volume wp_data (33).
+    user: "33:33"
+    command: ["while true; do wp --allow-root --path=/var/www/html cron event run --due-now || true; sleep 30; done"]
+    environment:
+      # Mesmo motivo do serviço wpcli: o wp-config.php resolve DB_* via getenv_docker().
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: ${MARIADB_DATABASE}
+      WORDPRESS_DB_USER: ${MARIADB_USER}
+      WORDPRESS_DB_PASSWORD: ${MARIADB_PASSWORD}
+      HMAC_SECRET: ${HMAC_SECRET}
+      WORDPRESS_CONFIG_EXTRA: *wordpress-config-extra
+    volumes:
+      - wp_data:/var/www/html
+      - ../make-it-static-wp-plugin:/var/www/html/wp-content/plugins/make-it-static
+    depends_on:
+      wordpress:
+        condition: service_started
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+
+  make-it-static-api:
+    # Imagem publicada no Docker Hub pelo workflow dockerhub.yml (tags sem o "v"
+    # do git: v0.2.2 → 0.2.2). Para desenvolver o serviço localmente, troque por:
+    # build: ../make-it-static/api
+    image: driedel/make-it-static-api:${MIS_VERSION:-0.2.2}
+    restart: unless-stopped
+    ports:
+      - "8302:8000"
+    networks:
+      - default
+      - make-it-static-network
+    # env_file só nos serviços do serviço Make it Static (+ localstack/preview).
+    env_file: .env
+    depends_on:
+      - redis
+
+  make-it-static-worker:
+    # Idem api: imagem do Hub. Para build local: build: ../make-it-static/worker
+    image: driedel/make-it-static-worker:${MIS_VERSION:-0.2.2}
+    restart: unless-stopped
+    # Em produção o host público do site é alcançável pelo worker; na POC o "host
+    # público" é o localhost:8300 da máquina — este shim faz o worker alcançá-lo
+    # (emula a condição real, sem maquiar o banco: o post_content mantém as URLs
+    # absolutas http://localhost:8300/... como em qualquer WordPress real).
+    extra_hosts:
+      - "localhost:host-gateway"
+    networks:
+      - default
+      - make-it-static-network
+    env_file: .env
+    depends_on:
+      - redis
+      - localstack
+
+  localstack:
+    image: localstack/localstack:4.6.0
+    restart: unless-stopped
+    ports:
+      - "8303:4566"
+    env_file: .env
+    environment:
+      SERVICES: s3
+      EAGER_SERVICE_LOADING: "1"
+    volumes:
+      - localstack_data:/var/lib/localstack
+      - ./localstack/init-s3.sh:/etc/localstack/init/ready.d/init-s3.sh:ro
+
+  preview:
+    image: nginx:1.30-alpine
+    restart: unless-stopped
+    ports:
+      - "8301:80"
+    env_file: .env
+    volumes:
+      - ./nginx/default.conf.template:/etc/nginx/templates/default.conf.template:ro
+    depends_on:
+      - localstack
+
+networks:
+  # Rede externa compartilhada com o ecossistema Make it Static — precisa existir
+  # antes do up: docker network create make-it-static-network
+  make-it-static-network:
+    external: true
+
+volumes:
+  db_data:
+  wp_data:
+  redis_data:
+  localstack_data:
