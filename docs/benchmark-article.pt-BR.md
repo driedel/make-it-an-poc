@@ -19,7 +19,7 @@ E "ver funcionando" inclui duas perguntas que só um teste E2E honesto responde:
 
 Comparamos o **WordPress dinâmico** (Apache + PHP + MariaDB, na porta 8300) com o **site estático** gerado pelo pipeline (nginx de preview, na porta 8301), lado a lado, na mesma máquina:
 
-- **Páginas**: home (`/`), `/block-gallery/` (pesada em imagens), `/markup-image-alignment/` (imagens de conteúdo) e `/category/block/` (arquivo de categoria).
+- **Páginas**: home (`/`), `/block-gallery/` (pesada em imagens), `/markup-image-alignment/` (imagens de conteúdo), `/category/block/` (arquivo de categoria) e `/media-category-blocks/` (a página de vídeo).
 - **Coleta**: Playwright (Chromium) rodando em Docker, via CDP. Para cada alvo × página × perfil: **1 warmup + 5 runs medidos**, cada um em um contexto de navegador novo (**cache frio**). Os valores reportados são **medianas**.
 - **Perfis**: `unthrottled` (rede local) e `throttled` (~1,6 Mbps de download / 750 Kbps de upload / 150 ms de RTT + CPU 4× mais lenta — algo como um 3G rápido).
 - **Justiça de compressão**: os dois lados servem **gzip**. O WordPress (Apache) já comprimia; o preview nginx **não** — então adicionamos gzip ao preview, em paridade com a compressão de borda que o CloudFront faria em produção. Sem isso, a comparação de bytes seria desonesta.
@@ -27,31 +27,32 @@ Comparamos o **WordPress dinâmico** (Apache + PHP + MariaDB, na porta 8300) com
 
 ## Resultados
 
-Mediana das 4 páginas (visão geral):
+Mediana das 5 páginas (visão geral):
 
 | Métrica | Perfil | WordPress dinâmico | Estático | Δ% |
 |---|---|---|---|---|
-| Requests | unthrottled | 11 | 8 | **−31,8%** |
-| Requests | throttled | 11 | 7 | **−36,4%** |
-| Bytes (fio) | ambos | 681,0 KB | 667,5 KB | −2,0% |
-| TTFB | unthrottled | 45 ms | 6 ms | **−86,2%** |
-| TTFB | throttled | 43 ms | 6 ms | **−86,7%** |
-| FCP | unthrottled | 82 ms | 50 ms | **−39,0%** |
-| LCP | unthrottled | 82 ms | 50 ms | **−39,0%** |
-| DOMContentLoaded | unthrottled | 72 ms | 33 ms | **−54,2%** |
-| Load | unthrottled | 73 ms | 36 ms | **−50,4%** |
-| Load | throttled | 3698 ms | 3628 ms | −1,9% |
+| Requests | unthrottled | 13 | 9 | **−30,8%** |
+| Requests | throttled | 13 | 8 | **−38,5%** |
+| Bytes (fio) | ambos | 681,9 KB | 667,5 KB | −2,0% |
+| TTFB | unthrottled | 38 ms | 5 ms | **−85,9%** |
+| TTFB | throttled | 38 ms | 6 ms | **−83,0%** |
+| FCP | unthrottled | 80 ms | 48 ms | **−40,0%** |
+| LCP | unthrottled | 80 ms | 48 ms | **−40,0%** |
+| DOMContentLoaded | unthrottled | 79 ms | 31 ms | **−60,1%** |
+| Load | unthrottled | 79 ms | 36 ms | **−53,9%** |
+| Load | throttled | 3701 ms | 3639 ms | −1,7% |
 
 Recorte por página (unthrottled), para mostrar que o ganho de payload depende do conteúdo:
 
 | Página | Bytes WP | Bytes estático | Δ% | Requests WP | Requests estático |
 |---|---|---|---|---|---|
-| `/` | 681,9 KB | 668,7 KB | −1,9% | 9 | 6 |
-| `/block-gallery/` | 1,86 MB | 1,23 MB | **−33,9%** | 22 | 18 |
-| `/markup-image-alignment/` | 209,9 KB | 119,7 KB | **−43,0%** | 13 | 9 |
-| `/category/block/` | 680,1 KB | 666,4 KB | −2,0% | 9 | 6 |
+| `/` | 681,9 KB | 669,2 KB | −1,9% | 9 | 6 |
+| `/block-gallery/` | 1,86 MB | 1,23 MB | **−33,8%** | 22 | 18 |
+| `/markup-image-alignment/` | 209,9 KB | 120,4 KB | **−42,6%** | 13 | 9 |
+| `/category/block/` | 680,1 KB | 666,9 KB | −1,9% | 9 | 6 |
+| `/media-category-blocks/` (vídeo) | 1,27 MB | 699,7 KB | **−45,1%** | 31 | 26 |
 
-**Leitura dos números.** O estático vence em toda métrica estrutural: **−86% de TTFB** (não há PHP nem banco no caminho da requisição), **~−33% de requests** (CSS e JS bundleados em um arquivo cada) e tempos de render praticamente **pela metade** sem throttling. O ganho de payload é **dependente de conteúdo**: os −2% gerais escondem que as páginas pesadas de imagem ganham muito (−34% a −43%), enquanto a home e a categoria são dominadas por JPEGs grandes que **já eram bem comprimidos** na origem — para esses, o AVIF do worker economiza pouco (ex.: uma imagem de 238,7 KB virou 234,9 KB). Onde a origem já é eficiente, o ganho de bytes é modesto; onde há imagem "crua", o AVIF brilha.
+**Leitura dos números.** O estático vence em toda métrica estrutural: **−86% de TTFB** (não há PHP nem banco no caminho da requisição), **~−33% de requests** (CSS e JS bundleados em um arquivo cada) e tempos de render praticamente **pela metade** sem throttling. O ganho de payload é **dependente de conteúdo**: os −2% gerais escondem que as páginas pesadas de imagem ganham muito (−34% a −45%), enquanto a home e a categoria são dominadas por JPEGs grandes que **já eram bem comprimidos** na origem — para esses, o AVIF do worker economiza pouco (ex.: uma imagem de 238,7 KB virou 234,9 KB). Onde a origem já é eficiente, o ganho de bytes é modesto; onde há imagem "crua", o AVIF brilha.
 
 ## Os 3 bugs que o E2E expôs (e como foram corrigidos)
 
@@ -65,10 +66,20 @@ A parte mais valiosa da POC não foi confirmar que o fluxo funciona — foi desc
 
 Nenhum dos três apareceria em um teste que não fosse E2E com conteúdo realista: o primeiro exigia links externos no conteúdo; o segundo, um WP 6.9+ renderizando de verdade; o terceiro, um banco com URLs absolutas e um host com porta não-padrão.
 
+## A 4ª validação: conversão de vídeo (e um bônus de compatibilidade)
+
+Depois dos bugs, a POC validou a **primeira feature nova do serviço**: a conversão de vídeos para WebM (VP9 + Opus), na linha da 0.3.0. O site de teste tem um `.mov` de **29,9 MB** (29.881.426 bytes) embutido em três posts. O pipeline o converteu para um `.webm` de **11,2 MB** (11.241.397 bytes) — **−62,4%** — reescreveu as referências nos três posts e removeu o original do bucket. E há cache: num segundo deploy, com o vídeo inalterado, o ffmpeg nem rodou (`video (cached) ... (already in S3)`) e a etapa de optimize caiu de 65,4 s para 23,8 s (**−63,6%**).
+
+O número de arquivo (−62,4%) vem do **relatório de build por job** — uma feature nova do serviço que o plugin exibe na tela de jobs: o deploy mais recente mostra **74 páginas, 430 arquivos, 68 MB → 42 MB (−38,6%)** de economia estrutural, com o `.mov` no topo do "Top savings". É essa a fonte dos números de arquivo deste artigo (o benchmark mede bytes no fio; o relatório mede o arquivo em si).
+
+**O bônus de compatibilidade.** O `.mov` é QuickTime — **o Chrome não o reproduz**: no WordPress dinâmico, o vídeo simplesmente não toca. No estático, o `.webm` toca em qualquer browser moderno. Ou seja, a conversão não só economiza 62,4% de payload como **faz o vídeo existir** para a maioria dos visitantes.
+
+**O que o benchmark mediu na página de vídeo** (`/media-category-blocks/`): −45,1% de bytes, −16,1% de requests e −40,1% de load sem throttling (−46,8% / −18,5% / −33,4% com throttling). Mas atenção à leitura honesta: esse delta vem das **imagens** da página (AVIF: 1,12 MB → 647 KB), não do vídeo. Num carregamento frio e sem interação, o browser transfere **~0 bytes de vídeo dos dois lados**: o `.mov` do WP não é baixado (o Chromium rejeita o formato — e, no harness em container, a URL absoluta `localhost:8300` ainda resolve para o próprio container do browser), e o `.webm` do estático é só sondado (`preload="metadata"`: as respostas 206 são abortadas antes do corpo). O payload de vídeo de verdade (29,9 → 11,2 MB) só se realiza quando alguém aperta o play — e aí só o estático consegue tocá-lo.
+
 ## Ressalvas (para não nos enganarmos)
 
 - **O WordPress aqui é local, em Docker** — mais rápido que uma hospedagem compartilhada típica. Os ganhos de **payload e nº de requests são exatos**; os ganhos de **tempo de servidor** (TTFB, Load) são **indicativos** — contra um WP hospedado de verdade, seriam *maiores*.
-- Sob throttling, o FCP/DCL do estático ficou marginalmente **atrás** em algumas páginas (+5,8%/+4,4% na visão geral, ~55 ms): o JS bundleado perde o atributo `defer` na bundling e sai render-blocking no fim do `<head>`, enquanto os scripts do tema são deferidos. Load (−1,9%) e LCP (−0,3%) seguem a favor/empatados. Manter o `defer` no bundle é uma melhoria candidata no serviço.
+- Sob throttling, o FCP/DCL do estático ficou marginalmente **atrás** em algumas páginas (+5,3%/+4,9% na visão geral, ~50 ms): o JS bundleado perde o atributo `defer` na bundling e sai render-blocking no fim do `<head>`, enquanto os scripts do tema são deferidos. Load (−1,7%) e LCP (−12,2%) seguem a favor do estático. Manter o `defer` no bundle é uma melhoria candidata no serviço.
 - O benchmark mede **uma máquina, um conteúdo, dois perfis de rede**. É um indicativo sólido da estrutura (requests, bytes, TTFB), não uma promessa de números idênticos em qualquer site.
 
 ## Conclusão

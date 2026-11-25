@@ -2,7 +2,7 @@
   "target": "static",
   "baseUrl": "http://host.docker.internal:8301",
   "profile": "unthrottled",
-  "startedAt": "2026-11-25T14:35:56.484Z",
+  "startedAt": "2026-11-25T15:50:26.126Z",
   "runsPerPage": 5,
   "pages": {
     "/": {
@@ -18,42 +18,17 @@
             }
           },
           "bytes": {
-            "total": 668707,
+            "total": 669217,
             "byType": {
-              "document": 17541,
-              "stylesheet": 24791,
-              "image": 621222,
-              "script": 5153
+              "document": 17626,
+              "stylesheet": 24876,
+              "image": 621477,
+              "script": 5238
             }
           },
-          "ttfb": 5.5,
-          "domContentLoaded": 35.39999997615814,
-          "load": 35.39999997615814,
-          "fcp": 40,
-          "lcp": 40
-        },
-        {
-          "requests": {
-            "total": 6,
-            "byType": {
-              "document": 1,
-              "stylesheet": 1,
-              "script": 1,
-              "image": 3
-            }
-          },
-          "bytes": {
-            "total": 668707,
-            "byType": {
-              "document": 17541,
-              "script": 5153,
-              "image": 621222,
-              "stylesheet": 24791
-            }
-          },
-          "ttfb": 6.299999952316284,
-          "domContentLoaded": 31.399999976158142,
-          "load": 36.799999952316284,
+          "ttfb": 6.699999928474426,
+          "domContentLoaded": 30.799999952316284,
+          "load": 36.299999952316284,
           "fcp": 52,
           "lcp": 52
         },
@@ -68,19 +43,19 @@
             }
           },
           "bytes": {
-            "total": 668707,
+            "total": 669217,
             "byType": {
-              "document": 17541,
-              "stylesheet": 24791,
-              "script": 5153,
-              "image": 621222
+              "document": 17626,
+              "script": 5238,
+              "stylesheet": 24876,
+              "image": 621477
             }
           },
-          "ttfb": 6.700000047683716,
-          "domContentLoaded": 28.800000071525574,
-          "load": 34.40000009536743,
-          "fcp": 48,
-          "lcp": 48
+          "ttfb": 4.800000071525574,
+          "domContentLoaded": 22.899999976158142,
+          "load": 29,
+          "fcp": 44,
+          "lcp": 44
         },
         {
           "requests": {
@@ -93,19 +68,19 @@
             }
           },
           "bytes": {
-            "total": 668707,
+            "total": 669217,
             "byType": {
-              "document": 17541,
-              "stylesheet": 24791,
-              "image": 621222,
-              "script": 5153
+              "document": 17626,
+              "stylesheet": 24876,
+              "image": 621477,
+              "script": 5238
             }
           },
-          "ttfb": 20.399999976158142,
-          "domContentLoaded": 44,
-          "load": 48.700000047683716,
-          "fcp": 64,
-          "lcp": 64
+          "ttfb": 4.300000071525574,
+          "domContentLoaded": 22.899999976158142,
+          "load": 27.700000047683716,
+          "fcp": 44,
+          "lcp": 44
         },
         {
           "requests": {
@@ -118,19 +93,44 @@
             }
           },
           "bytes": {
-            "total": 668707,
+            "total": 669217,
             "byType": {
-              "document": 17541,
-              "stylesheet": 24791,
-              "script": 5153,
-              "image": 621222
+              "document": 17626,
+              "stylesheet": 24876,
+              "image": 621477,
+              "script": 5238
             }
           },
-          "ttfb": 6.100000023841858,
-          "domContentLoaded": 42.799999952316284,
-          "load": 42.799999952316284,
-          "fcp": 48,
-          "lcp": 48
+          "ttfb": 9.600000023841858,
+          "domContentLoaded": 109.19999992847443,
+          "load": 109.19999992847443,
+          "fcp": 120,
+          "lcp": 120
+        },
+        {
+          "requests": {
+            "total": 6,
+            "byType": {
+              "document": 1,
+              "stylesheet": 1,
+              "script": 1,
+              "image": 3
+            }
+          },
+          "bytes": {
+            "total": 669217,
+            "byType": {
+              "document": 17626,
+              "stylesheet": 24876,
+              "image": 621477,
+              "script": 5238
+            }
+          },
+          "ttfb": 8.699999928474426,
+          "domContentLoaded": 54.199999928474426,
+          "load": 59.5,
+          "fcp": 88,
+          "lcp": 88
         }
       ],
       "median": {
@@ -144,19 +144,19 @@
           }
         },
         "bytes": {
-          "total": 668707,
+          "total": 669217,
           "byType": {
-            "document": 17541,
-            "stylesheet": 24791,
-            "image": 621222,
-            "script": 5153
+            "document": 17626,
+            "stylesheet": 24876,
+            "image": 621477,
+            "script": 5238
           }
         },
-        "ttfb": 6.299999952316284,
-        "domContentLoaded": 35.39999997615814,
-        "load": 36.799999952316284,
-        "fcp": 48,
-        "lcp": 48
+        "ttfb": 6.699999928474426,
+        "domContentLoaded": 30.799999952316284,
+        "load": 36.299999952316284,
+        "fcp": 52,
+        "lcp": 52
       }
     },
     "/block-gallery/": {
@@ -172,17 +172,67 @@
             }
           },
           "bytes": {
-            "total": 1232742,
+            "total": 1234272,
             "byType": {
-              "document": 19549,
-              "stylesheet": 24791,
-              "image": 1180333,
-              "script": 8069
+              "stylesheet": 24876,
+              "document": 19634,
+              "script": 8154,
+              "image": 1181608
             }
           },
-          "ttfb": 7.399999976158142,
-          "domContentLoaded": 45.5,
-          "load": 45.699999928474426,
+          "ttfb": 4.200000047683716,
+          "domContentLoaded": 38.39999997615814,
+          "load": 39.39999997615814,
+          "fcp": 44,
+          "lcp": 44
+        },
+        {
+          "requests": {
+            "total": 18,
+            "byType": {
+              "document": 1,
+              "stylesheet": 1,
+              "script": 1,
+              "image": 15
+            }
+          },
+          "bytes": {
+            "total": 1234272,
+            "byType": {
+              "document": 19634,
+              "stylesheet": 24876,
+              "image": 1181608,
+              "script": 8154
+            }
+          },
+          "ttfb": 4.199999928474426,
+          "domContentLoaded": 24.899999976158142,
+          "load": 29,
+          "fcp": 44,
+          "lcp": 44
+        },
+        {
+          "requests": {
+            "total": 18,
+            "byType": {
+              "document": 1,
+              "stylesheet": 1,
+              "script": 1,
+              "image": 15
+            }
+          },
+          "bytes": {
+            "total": 1234272,
+            "byType": {
+              "document": 19634,
+              "image": 1181608,
+              "stylesheet": 24876,
+              "script": 8154
+            }
+          },
+          "ttfb": 6.100000023841858,
+          "domContentLoaded": 44.5,
+          "load": 44.60000002384186,
           "fcp": 52,
           "lcp": 52
         },
@@ -197,17 +247,17 @@
             }
           },
           "bytes": {
-            "total": 1232742,
+            "total": 1234272,
             "byType": {
-              "document": 19549,
-              "script": 8069,
-              "image": 1180333,
-              "stylesheet": 24791
+              "document": 19634,
+              "stylesheet": 24876,
+              "image": 1181608,
+              "script": 8154
             }
           },
-          "ttfb": 8.899999976158142,
-          "domContentLoaded": 47.89999997615814,
-          "load": 47.89999997615814,
+          "ttfb": 7.5,
+          "domContentLoaded": 45.200000047683716,
+          "load": 45.200000047683716,
           "fcp": 52,
           "lcp": 52
         },
@@ -222,67 +272,17 @@
             }
           },
           "bytes": {
-            "total": 1232742,
+            "total": 1234272,
             "byType": {
-              "document": 19549,
-              "stylesheet": 24791,
-              "script": 8069,
-              "image": 1180333
+              "document": 19634,
+              "stylesheet": 24876,
+              "image": 1181608,
+              "script": 8154
             }
           },
-          "ttfb": 6.199999928474426,
-          "domContentLoaded": 31,
-          "load": 36.199999928474426,
-          "fcp": 56,
-          "lcp": 56
-        },
-        {
-          "requests": {
-            "total": 18,
-            "byType": {
-              "document": 1,
-              "stylesheet": 1,
-              "script": 1,
-              "image": 15
-            }
-          },
-          "bytes": {
-            "total": 1232742,
-            "byType": {
-              "document": 19549,
-              "script": 8069,
-              "stylesheet": 24791,
-              "image": 1180333
-            }
-          },
-          "ttfb": 5.200000047683716,
-          "domContentLoaded": 30.399999976158142,
-          "load": 35.200000047683716,
-          "fcp": 52,
-          "lcp": 52
-        },
-        {
-          "requests": {
-            "total": 18,
-            "byType": {
-              "document": 1,
-              "stylesheet": 1,
-              "script": 1,
-              "image": 15
-            }
-          },
-          "bytes": {
-            "total": 1232742,
-            "byType": {
-              "stylesheet": 24791,
-              "document": 19549,
-              "script": 8069,
-              "image": 1180333
-            }
-          },
-          "ttfb": 4.099999904632568,
-          "domContentLoaded": 25.59999990463257,
-          "load": 30.09999990463257,
+          "ttfb": 4.200000047683716,
+          "domContentLoaded": 23.899999976158142,
+          "load": 28,
           "fcp": 44,
           "lcp": 44
         }
@@ -298,19 +298,19 @@
           }
         },
         "bytes": {
-          "total": 1232742,
+          "total": 1234272,
           "byType": {
-            "document": 19549,
-            "stylesheet": 24791,
-            "image": 1180333,
-            "script": 8069
+            "stylesheet": 24876,
+            "document": 19634,
+            "script": 8154,
+            "image": 1181608
           }
         },
-        "ttfb": 6.199999928474426,
-        "domContentLoaded": 31,
-        "load": 36.199999928474426,
-        "fcp": 52,
-        "lcp": 52
+        "ttfb": 4.200000047683716,
+        "domContentLoaded": 38.39999997615814,
+        "load": 39.39999997615814,
+        "fcp": 44,
+        "lcp": 44
       }
     },
     "/markup-image-alignment/": {
@@ -326,42 +326,17 @@
             }
           },
           "bytes": {
-            "total": 119661,
+            "total": 120426,
             "byType": {
-              "document": 11407,
-              "image": 78310,
-              "script": 5153,
-              "stylesheet": 24791
+              "document": 11492,
+              "image": 78820,
+              "stylesheet": 24876,
+              "script": 5238
             }
           },
-          "ttfb": 6.100000023841858,
-          "domContentLoaded": 31.200000047683716,
-          "load": 34.300000071525574,
-          "fcp": 48,
-          "lcp": 48
-        },
-        {
-          "requests": {
-            "total": 9,
-            "byType": {
-              "document": 1,
-              "stylesheet": 1,
-              "script": 1,
-              "image": 6
-            }
-          },
-          "bytes": {
-            "total": 119661,
-            "byType": {
-              "document": 11407,
-              "stylesheet": 24791,
-              "script": 5153,
-              "image": 78310
-            }
-          },
-          "ttfb": 6.299999952316284,
-          "domContentLoaded": 36.799999952316284,
-          "load": 37,
+          "ttfb": 5.899999976158142,
+          "domContentLoaded": 39,
+          "load": 41,
           "fcp": 44,
           "lcp": 44
         },
@@ -376,17 +351,17 @@
             }
           },
           "bytes": {
-            "total": 119661,
+            "total": 120426,
             "byType": {
-              "document": 11407,
-              "image": 78310,
-              "stylesheet": 24791,
-              "script": 5153
+              "document": 11492,
+              "stylesheet": 24876,
+              "image": 78820,
+              "script": 5238
             }
           },
-          "ttfb": 5.700000047683716,
-          "domContentLoaded": 36,
-          "load": 36.10000002384186,
+          "ttfb": 5.799999952316284,
+          "domContentLoaded": 35.89999997615814,
+          "load": 36,
           "fcp": 40,
           "lcp": 40
         },
@@ -401,17 +376,42 @@
             }
           },
           "bytes": {
-            "total": 119661,
+            "total": 120426,
             "byType": {
-              "document": 11407,
-              "image": 78310,
-              "stylesheet": 24791,
-              "script": 5153
+              "document": 11492,
+              "stylesheet": 24876,
+              "image": 78820,
+              "script": 5238
             }
           },
-          "ttfb": 5.700000047683716,
-          "domContentLoaded": 38.700000047683716,
-          "load": 38.700000047683716,
+          "ttfb": 6.300000071525574,
+          "domContentLoaded": 25.600000023841858,
+          "load": 28.600000023841858,
+          "fcp": 48,
+          "lcp": 48
+        },
+        {
+          "requests": {
+            "total": 9,
+            "byType": {
+              "document": 1,
+              "stylesheet": 1,
+              "script": 1,
+              "image": 6
+            }
+          },
+          "bytes": {
+            "total": 120426,
+            "byType": {
+              "document": 11492,
+              "image": 78820,
+              "stylesheet": 24876,
+              "script": 5238
+            }
+          },
+          "ttfb": 7.5,
+          "domContentLoaded": 39.5,
+          "load": 39.5,
           "fcp": 44,
           "lcp": 44
         },
@@ -426,19 +426,19 @@
             }
           },
           "bytes": {
-            "total": 119661,
+            "total": 120426,
             "byType": {
-              "document": 11407,
-              "image": 78310,
-              "script": 5153,
-              "stylesheet": 24791
+              "document": 11492,
+              "stylesheet": 24876,
+              "script": 5238,
+              "image": 78820
             }
           },
-          "ttfb": 6.400000095367432,
-          "domContentLoaded": 33.10000002384186,
-          "load": 36.200000047683716,
-          "fcp": 52,
-          "lcp": 52
+          "ttfb": 6.100000023841858,
+          "domContentLoaded": 25.600000023841858,
+          "load": 29.299999952316284,
+          "fcp": 44,
+          "lcp": 44
         }
       ],
       "median": {
@@ -452,17 +452,17 @@
           }
         },
         "bytes": {
-          "total": 119661,
+          "total": 120426,
           "byType": {
-            "document": 11407,
-            "image": 78310,
-            "script": 5153,
-            "stylesheet": 24791
+            "document": 11492,
+            "image": 78820,
+            "stylesheet": 24876,
+            "script": 5238
           }
         },
         "ttfb": 6.100000023841858,
-        "domContentLoaded": 36,
-        "load": 36.200000047683716,
+        "domContentLoaded": 35.89999997615814,
+        "load": 36,
         "fcp": 44,
         "lcp": 44
       }
@@ -480,67 +480,17 @@
             }
           },
           "bytes": {
-            "total": 666354,
+            "total": 666864,
             "byType": {
-              "document": 15188,
-              "stylesheet": 24791,
-              "image": 621222,
-              "script": 5153
+              "document": 15273,
+              "script": 5238,
+              "stylesheet": 24876,
+              "image": 621477
             }
           },
-          "ttfb": 7.799999952316284,
-          "domContentLoaded": 29.899999976158142,
-          "load": 33.89999997615814,
-          "fcp": 52,
-          "lcp": 52
-        },
-        {
-          "requests": {
-            "total": 6,
-            "byType": {
-              "document": 1,
-              "stylesheet": 1,
-              "script": 1,
-              "image": 3
-            }
-          },
-          "bytes": {
-            "total": 666354,
-            "byType": {
-              "document": 15188,
-              "stylesheet": 24791,
-              "image": 621222,
-              "script": 5153
-            }
-          },
-          "ttfb": 6.299999952316284,
-          "domContentLoaded": 39.5,
-          "load": 39.5,
-          "fcp": 44,
-          "lcp": 44
-        },
-        {
-          "requests": {
-            "total": 6,
-            "byType": {
-              "document": 1,
-              "stylesheet": 1,
-              "script": 1,
-              "image": 3
-            }
-          },
-          "bytes": {
-            "total": 666354,
-            "byType": {
-              "document": 15188,
-              "script": 5153,
-              "image": 621222,
-              "stylesheet": 24791
-            }
-          },
-          "ttfb": 6,
-          "domContentLoaded": 29.399999976158142,
-          "load": 33.700000047683716,
+          "ttfb": 6.5,
+          "domContentLoaded": 29.600000023841858,
+          "load": 33.800000071525574,
           "fcp": 48,
           "lcp": 48
         },
@@ -555,19 +505,19 @@
             }
           },
           "bytes": {
-            "total": 666354,
+            "total": 666864,
             "byType": {
-              "document": 15188,
-              "script": 5153,
-              "image": 621222,
-              "stylesheet": 24791
+              "document": 15273,
+              "script": 5238,
+              "image": 621477,
+              "stylesheet": 24876
             }
           },
-          "ttfb": 6,
-          "domContentLoaded": 28.899999976158142,
-          "load": 33.299999952316284,
-          "fcp": 52,
-          "lcp": 52
+          "ttfb": 5.099999904632568,
+          "domContentLoaded": 25.199999928474426,
+          "load": 29,
+          "fcp": 44,
+          "lcp": 44
         },
         {
           "requests": {
@@ -580,17 +530,67 @@
             }
           },
           "bytes": {
-            "total": 666354,
+            "total": 666864,
             "byType": {
-              "document": 15188,
-              "script": 5153,
-              "image": 621222,
-              "stylesheet": 24791
+              "document": 15273,
+              "script": 5238,
+              "stylesheet": 24876,
+              "image": 621477
             }
           },
-          "ttfb": 7.299999952316284,
-          "domContentLoaded": 32.60000002384186,
-          "load": 37.10000002384186,
+          "ttfb": 3.600000023841858,
+          "domContentLoaded": 20.899999976158142,
+          "load": 24.399999976158142,
+          "fcp": 40,
+          "lcp": 40
+        },
+        {
+          "requests": {
+            "total": 6,
+            "byType": {
+              "document": 1,
+              "stylesheet": 1,
+              "script": 1,
+              "image": 3
+            }
+          },
+          "bytes": {
+            "total": 666864,
+            "byType": {
+              "document": 15273,
+              "script": 5238,
+              "image": 621477,
+              "stylesheet": 24876
+            }
+          },
+          "ttfb": 6.5,
+          "domContentLoaded": 41.799999952316284,
+          "load": 41.799999952316284,
+          "fcp": 48,
+          "lcp": 48
+        },
+        {
+          "requests": {
+            "total": 6,
+            "byType": {
+              "document": 1,
+              "stylesheet": 1,
+              "script": 1,
+              "image": 3
+            }
+          },
+          "bytes": {
+            "total": 666864,
+            "byType": {
+              "document": 15273,
+              "stylesheet": 24876,
+              "image": 621477,
+              "script": 5238
+            }
+          },
+          "ttfb": 5.300000071525574,
+          "domContentLoaded": 44,
+          "load": 44,
           "fcp": 56,
           "lcp": 56
         }
@@ -606,45 +606,206 @@
           }
         },
         "bytes": {
-          "total": 666354,
+          "total": 666864,
           "byType": {
-            "document": 15188,
-            "stylesheet": 24791,
-            "image": 621222,
-            "script": 5153
+            "document": 15273,
+            "script": 5238,
+            "stylesheet": 24876,
+            "image": 621477
           }
         },
-        "ttfb": 6.299999952316284,
-        "domContentLoaded": 29.899999976158142,
-        "load": 33.89999997615814,
-        "fcp": 52,
-        "lcp": 52
+        "ttfb": 5.300000071525574,
+        "domContentLoaded": 29.600000023841858,
+        "load": 33.800000071525574,
+        "fcp": 48,
+        "lcp": 48
+      }
+    },
+    "/media-category-blocks/": {
+      "runs": [
+        {
+          "requests": {
+            "total": 26,
+            "byType": {
+              "document": 1,
+              "stylesheet": 1,
+              "script": 1,
+              "image": 20,
+              "media": 3
+            }
+          },
+          "bytes": {
+            "total": 699716,
+            "byType": {
+              "document": 17466,
+              "script": 8154,
+              "stylesheet": 27047,
+              "image": 647049
+            }
+          },
+          "ttfb": 4.800000071525574,
+          "domContentLoaded": 42,
+          "load": 96.70000004768372,
+          "fcp": 48,
+          "lcp": 48
+        },
+        {
+          "requests": {
+            "total": 26,
+            "byType": {
+              "document": 1,
+              "stylesheet": 1,
+              "script": 1,
+              "image": 20,
+              "media": 3
+            }
+          },
+          "bytes": {
+            "total": 699716,
+            "byType": {
+              "document": 17466,
+              "script": 8154,
+              "image": 647049,
+              "stylesheet": 27047
+            }
+          },
+          "ttfb": 6.299999952316284,
+          "domContentLoaded": 31.399999976158142,
+          "load": 73.60000002384186,
+          "fcp": 64,
+          "lcp": 64
+        },
+        {
+          "requests": {
+            "total": 26,
+            "byType": {
+              "document": 1,
+              "stylesheet": 1,
+              "script": 1,
+              "image": 20,
+              "media": 3
+            }
+          },
+          "bytes": {
+            "total": 699716,
+            "byType": {
+              "document": 17466,
+              "stylesheet": 27047,
+              "script": 8154,
+              "image": 647049
+            }
+          },
+          "ttfb": 4.100000023841858,
+          "domContentLoaded": 45.800000071525574,
+          "load": 67.70000004768372,
+          "fcp": 48,
+          "lcp": 48
+        },
+        {
+          "requests": {
+            "total": 25,
+            "byType": {
+              "document": 1,
+              "stylesheet": 1,
+              "script": 1,
+              "image": 19,
+              "media": 3
+            }
+          },
+          "bytes": {
+            "total": 680260,
+            "byType": {
+              "document": 17466,
+              "script": 8154,
+              "image": 627593,
+              "stylesheet": 27047
+            }
+          },
+          "ttfb": 4,
+          "domContentLoaded": 29.59999990463257,
+          "load": 77.09999990463257,
+          "fcp": 60,
+          "lcp": 60
+        },
+        {
+          "requests": {
+            "total": 25,
+            "byType": {
+              "document": 1,
+              "stylesheet": 1,
+              "script": 1,
+              "image": 19,
+              "media": 3
+            }
+          },
+          "bytes": {
+            "total": 680260,
+            "byType": {
+              "document": 17466,
+              "stylesheet": 27047,
+              "script": 8154,
+              "image": 627593
+            }
+          },
+          "ttfb": 3.6999999284744263,
+          "domContentLoaded": 24.199999928474426,
+          "load": 75,
+          "fcp": 72,
+          "lcp": 72
+        }
+      ],
+      "median": {
+        "requests": {
+          "total": 26,
+          "byType": {
+            "document": 1,
+            "stylesheet": 1,
+            "script": 1,
+            "image": 20,
+            "media": 3
+          }
+        },
+        "bytes": {
+          "total": 699716,
+          "byType": {
+            "document": 17466,
+            "script": 8154,
+            "stylesheet": 27047,
+            "image": 647049
+          }
+        },
+        "ttfb": 4.100000023841858,
+        "domContentLoaded": 31.399999976158142,
+        "load": 75,
+        "fcp": 60,
+        "lcp": 60
       }
     }
   },
   "summary": {
     "requests": {
-      "total": 7.5,
+      "total": 9,
       "byType": {
         "document": 1,
         "stylesheet": 1,
         "script": 1,
-        "image": 4.5
+        "image": 6,
+        "media": 0
       }
     },
     "bytes": {
-      "total": 667530.5,
+      "total": 669217,
       "byType": {
-        "document": 16364.5,
-        "stylesheet": 24791,
-        "image": 621222,
-        "script": 5153
+        "document": 17466,
+        "stylesheet": 24876,
+        "image": 621477,
+        "script": 5238
       }
     },
-    "ttfb": 6.249999940395355,
-    "domContentLoaded": 33.19999998807907,
-    "load": 36.19999998807907,
-    "fcp": 50,
-    "lcp": 50
+    "ttfb": 5.300000071525574,
+    "domContentLoaded": 31.399999976158142,
+    "load": 36.299999952316284,
+    "fcp": 48,
+    "lcp": 48
   }
 }

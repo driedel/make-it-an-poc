@@ -37,7 +37,7 @@ if (!chromium) {
 }
 
 const RUNS_PER_PAGE = 5;
-const PAGES = ['/', '/block-gallery/', '/markup-image-alignment/', '/category/block/'];
+const PAGES = ['/', '/block-gallery/', '/markup-image-alignment/', '/category/block/', '/media-category-blocks/'];
 const PROFILES = {
   unthrottled: null,
   throttled: {

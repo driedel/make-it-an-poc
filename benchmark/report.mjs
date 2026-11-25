@@ -1,12 +1,12 @@
 // Reads benchmark/results/*.json and writes benchmark/results/results.md with
 // comparative tables (WP vs static, Δ% per metric) per profile plus an overall
-// summary table (median of the 4 page medians).
+// summary table (median of the page medians).
 
 import fs from 'node:fs';
 import path from 'node:path';
 
 const RESULTS_DIR = path.resolve(process.cwd(), 'benchmark/results');
-const PAGES = ['/', '/block-gallery/', '/markup-image-alignment/', '/category/block/'];
+const PAGES = ['/', '/block-gallery/', '/markup-image-alignment/', '/category/block/', '/media-category-blocks/'];
 const PROFILES = ['unthrottled', 'throttled'];
 
 function fmtBytes(n) {
@@ -86,7 +86,7 @@ function main() {
 
     lines.push(`## Profile: ${profile}`);
     lines.push('');
-    lines.push('### Overall (median of the 4 page medians)');
+    lines.push(`### Overall (median of the ${PAGES.length} page medians)`);
     lines.push('');
     lines.push('| Metric | WordPress (dynamic) | Static | Δ% |');
     lines.push('|---|---|---|---|');
