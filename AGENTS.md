@@ -34,7 +34,7 @@ Important structural points:
 - **`wpcli` and `cron` run as `user: "33:33"`**: the `wp_data` volume is created by the Debian image (`www-data`=33); in the Alpine `wordpress:cli` image `www-data` is 82 and would not be able to write to the volume.
 - **Dynamic `WORDPRESS_CONFIG_EXTRA`**: `WP_HOME`/`WP_SITEURL` derived from the request's `HTTP_HOST` (the worker scrapes `http://wordpress` and the HTML carries the `wordpress` host; the browser at `localhost:8300` sees `localhost:8300`), plus `WP_AUTO_UPDATE_CORE=false`. The YAML block (`x-wordpress-config-extra`) is shared by anchor across `wordpress`, `wpcli` and `cron` — in the CLI containers it is required for the WP-CLI context.
 - **`extra_hosts: ["localhost:host-gateway"]` shim on the worker**: in production the public host is reachable by the worker; in the POC the "public host" is the machine's `localhost:8300`, and this shim emulates that condition (the `post_content` keeps absolute `http://localhost:8300/...` URLs like a real WordPress — the database is **not** rewritten).
-- **`localstack/init-s3.sh`** creates the `my-static-site` bucket and allows anonymous reads at boot; **`nginx/default.conf.template`** rewrites `/path/` → `/{bucket}/{ORIGIN_HOST}/path/index.html` via `envsubst`. Both were copied from the service repo so the POC is self-contained.
+- **`localstack/init-s3.sh`** creates the `my-static-site` bucket and allows anonymous reads at boot; **`nginx/default.conf.template`** rewrites `/path/` → `/{bucket}/{ORIGIN_HOST}/path/index.html` via `envsubst`. Both were copied from the service repo so the POC is self-contained. **Documented deviation**: the template adds `gzip on` (+ `gzip_vary`/`gzip_proxied`/`gzip_min_length`/`gzip_types`) — the original serves uncompressed, but the dynamic WP (Apache) serves gzip and production CloudFront compresses at the edge, so the preview needs gzip for honest performance comparisons (see `benchmark/`).
 
 ## Prerequisites to run
 
@@ -60,6 +60,7 @@ There is no build and no automated test suite — "verification" is the manual E
 | `make jobs` | Last 10 jobs from the `wp_mis_jobs` table |
 | `make bucket-ls` | Lists the `my-static-site` bucket on LocalStack |
 | `make preview` | Preview HTTP status (`:8301`) |
+| `make benchmark` | Runs the WP vs static benchmark (Playwright in Docker) and regenerates `benchmark/results/results.md` |
 | `make cron-run` | Forces `wp cron event run --due-now` now |
 | `make logs-api` / `logs-worker` / `logs-cron` | Follows service logs |
 | `make break-secret` / `fix-secret` | Failure scenario 1: wrong HMAC secret (401 `bad signature`) / restore |
@@ -102,6 +103,13 @@ make-it-an-poc/
 ├── AGENTS.md                   # this file
 ├── seed/
 │   └── seed.sh                 # populates WP: imports content, activates the plugin, writes mis_settings
+├── benchmark/
+│   ├── measure.mjs             # Playwright/CDP measurement (runs in the mcr.microsoft.com/playwright container)
+│   ├── report.mjs              # generates results/results.md from the JSONs
+│   ├── package.json            # playwright pinned to the image version (node_modules is gitignored)
+│   └── results/                # one JSON per target×profile + results.md (committed evidence)
+├── docs/
+│   └── benchmark-article.pt-BR.md  # DRAFT blog post about the benchmark + the 3 E2E-found bugs
 ├── localstack/
 │   └── init-s3.sh              # creates the my-static-site bucket at LocalStack boot
 └── nginx/

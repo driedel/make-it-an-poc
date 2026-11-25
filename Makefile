@@ -2,7 +2,7 @@
 
 WP := docker compose exec -T wpcli wp --allow-root --path=/var/www/html
 
-.PHONY: help up pull down clean ps seed health logs-api logs-worker logs-cron publish publish-site jobs bucket-ls preview cron-run break-secret fix-secret stop-api start-api
+.PHONY: help up pull down clean ps seed health logs-api logs-worker logs-cron publish publish-site jobs bucket-ls preview cron-run break-secret fix-secret stop-api start-api benchmark
 
 help: ## Lista os alvos disponíveis (este menu)
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-14s\033[0m %s\n", $$1, $$2}'
@@ -32,6 +32,15 @@ up: ## Sobe o stack completo (rede, .env, portas 8300-8304, imagens do Hub)
 pull: ## Baixa imagens novas do Hub (ex.: após mudar MIS_VERSION no .env) e recria
 	docker compose pull
 	docker compose up -d
+
+PLAYWRIGHT_IMAGE := mcr.microsoft.com/playwright:v1.64.1-noble
+
+benchmark: ## Roda o benchmark WP dinâmico vs site estático (Playwright em Docker, ~96 page loads)
+	docker run --rm --add-host=host.docker.internal:host-gateway \
+		-v "$(PWD):/work" -w /work \
+		-e PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 \
+		$(PLAYWRIGHT_IMAGE) \
+		sh -c "cd benchmark && (test -d node_modules/playwright || npm install --no-audit --no-fund) && cd .. && node benchmark/measure.mjs && node benchmark/report.mjs"
 
 down: ## Para e remove os containers (mantém os volumes/dados)
 	docker compose down

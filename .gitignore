@@ -2,3 +2,4 @@
 .DS_Store
 seed/.tmp/
 *.log
+benchmark/node_modules/

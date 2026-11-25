@@ -1,6 +1,16 @@
 server {
     listen 80;
 
+    # gzip for parity with CloudFront edge compression in production: without it
+    # the preview serves HTML/CSS/JS uncompressed while the dynamic WP (:8300,
+    # Apache) serves gzip, which would skew any performance comparison.
+    # Documented deviation from the service's original template copy.
+    gzip on;
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_min_length 256;
+    gzip_types text/html text/css application/javascript application/json image/svg+xml;
+
     location / {
         # Local preview only — not used in production.
         # ${S3_BUCKET} and ${ORIGIN_HOST} are substituted by envsubst in nginx:alpine.
