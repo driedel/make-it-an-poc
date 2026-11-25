@@ -284,6 +284,7 @@ make-it-an-poc/
 ## Troubleshooting
 
 - **Port in use**: `make up` validates ports 8300–8304 and tells you which one is taken. Stop the conflicting process (including the `make-it-static` dev stack) and try again.
+- **Changed `scrape_url_base` to `localhost:8300` and the preview didn't update?** The hostname of the scrape URL is the site's identity for the service: the worker derives the S3 prefix from it (`s3://my-static-site/<host>/`) and the preview nginx serves the prefix pinned by `ORIGIN_HOST` (`wordpress`). Publishing via `http://localhost:8300` even works (the `host-gateway` shim makes it reachable from the worker), but the deploy lands under `localhost/` — invisible to the preview. Keep `http://wordpress` in the POC; in production leave the field empty so the public home URL is used. To remove a stray prefix: `docker compose exec localstack awslocal s3 rm s3://my-static-site/localhost --recursive`.
 - **Running a different service version**: set `MIS_VERSION` in `.env` and run `make pull && docker compose up -d`.
 - **Local service build (development)**: uncomment the `build:` lines of `make-it-static-api`/`make-it-static-worker` in `docker-compose.yml` (and comment out `image:`), which requires the `../make-it-static` clone; then `docker compose up --build -d`.
 - **View logs**: `make logs-worker` (scrape/upload), `make logs-api`, `make logs-cron`.
