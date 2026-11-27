@@ -43,7 +43,7 @@ do not trigger WP-Cron on their own.
 ## Prerequisites
 
 - **Docker Desktop** installed and running (with `docker compose` v2).
-- **Sibling clone of the plugin** in the same parent directory as this POC: `../make-it-static-wp-plugin` — the plugin is bind-mounted into WordPress.
+- **Sibling clone of the plugin** in the same parent directory as this POC: `../make-it-static-publisher` — the plugin is bind-mounted into WordPress.
 - **Service images on Docker Hub** (public, `driedel` namespace): the API and worker use `driedel/make-it-static-api` and `driedel/make-it-static-worker`, tagged via `MIS_VERSION` in `.env` (default `0.2.2`; tags do **not** carry the `v` prefix). `make up` pulls them automatically; `make pull` updates them manually. The `../make-it-static` clone is **no longer required to run** — it remains useful for developing the service (local build commented in `docker-compose.yml`).
 - **Ports 8300–8304 free** on the host (`make up` validates them and reports which one is taken).
 - **make-it-static dev stack stopped**, to avoid port and `make-it-static-network` conflicts.

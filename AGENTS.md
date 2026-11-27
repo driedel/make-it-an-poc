@@ -6,7 +6,7 @@ Guide for AI coding agents working in this repository. Project language: **Engli
 
 This repository contains **no application source code** (no `package.json`, `pyproject.toml`, `Cargo.toml` etc.). It is a **100% Docker end-to-end test POC** that orchestrates — via `docker-compose.yml` + `Makefile` + seed scripts — the communication between:
 
-- the **Make it Static** WordPress plugin (HTTP client, bind-mounted from a sibling clone at `../make-it-static-wp-plugin`);
+- the **Make it Static** WordPress plugin (HTTP client, bind-mounted from a sibling clone at `../make-it-static-publisher`);
 - and the **Make it Static** service (FastAPI API + RQ worker + Redis + S3 via LocalStack + preview nginx), consumed as **pre-built Docker Hub images** (`driedel/make-it-static-api` and `driedel/make-it-static-worker`, tag `MIS_VERSION` from `.env`, default `0.2.2` — tags do **not** carry the `v` prefix).
 
 Covered E2E flow: publishing a post in WordPress fires a **signed** `POST /publish` (HMAC-SHA256 of the raw body + `X-Timestamp` header) to the API; a WP-Cron poller checks the status every 30s; the worker scrapes the site over the internal network with `wget`, optimizes the assets, and uploads the static site to the S3 bucket (`my-static-site`, prefix `wordpress/`), served by the preview nginx on port 8301.
@@ -39,7 +39,7 @@ Important structural points:
 ## Prerequisites to run
 
 - Docker Desktop with `docker compose` v2.
-- **Sibling clone of the plugin** at `../make-it-static-wp-plugin` (bind-mounted at `wp-content/plugins/make-it-static`).
+- **Sibling clone of the plugin** at `../make-it-static-publisher` (bind-mounted at `wp-content/plugins/make-it-static`).
 - Ports **8300–8304 free**; `make-it-static` dev stack stopped (port and network conflicts).
 - `.env` created from `.env.example`, with `HMAC_SECRET` generated via `openssl rand -hex 32`.
 
@@ -118,7 +118,7 @@ make-it-an-poc/
         └── results/            # one JSON per target×profile + results.md (committed evidence)
 ```
 
-Related repositories (sibling clones in the same parent directory): `../make-it-static-wp-plugin` (the plugin, **required** to run) and `../make-it-static` (the service, optional — only for developing/locally building the images).
+Related repositories (sibling clones in the same parent directory): `../make-it-static-publisher` (the plugin, **required** to run) and `../make-it-static` (the service, optional — only for developing/locally building the images).
 
 ## Known pitfalls (do not "fix" without understanding why)
 
